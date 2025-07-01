@@ -27,8 +27,8 @@ const clientSection = document.getElementById("client-section");
 const engineerSection = document.getElementById("engineer-section");
 const chatSection = document.getElementById("chat-section");
 const clientFormInputs = clientSection.querySelectorAll("input[type='text'], textarea");
-const engineerFormCheckboxes = engineerSection.querySelectorAll("input[type='checkbox']"); // This now includes 'completed'
-const engineerProgressCheckboxes = Array.from(engineerFormCheckboxes).filter(cb => cb.id !== 'completed'); // Filter out 'completed'
+const engineerFormCheckboxes = engineerSection.querySelectorAll("input[type='checkbox']");
+const engineerProgressCheckboxes = Array.from(engineerFormCheckboxes).filter(cb => cb.id !== 'completed');
 const engineerComments = document.getElementById("engineerComments");
 const newMessageInput = document.getElementById("newMessage");
 const messagesDisplay = document.getElementById("messagesDisplay");
@@ -56,7 +56,6 @@ function renderEngineerProgress() {
             }
         }
     }
-    engineerSectionError.textContent = '';
 }
 
 function renderMessages() {
@@ -70,7 +69,6 @@ function renderMessages() {
         messageDiv.appendChild(bubble);
         messagesDisplay.appendChild(messageDiv);
     });
-    // Scroll to bottom
     messagesDisplay.scrollTop = messagesDisplay.scrollHeight;
 }
 
@@ -114,7 +112,6 @@ function handleClientChange(e) {
 function handleEngineerChange(e) {
     const { name, checked } = e.target;
     engineerProgress = { ...engineerProgress, [name]: checked };
-    engineerSectionError.textContent = '';
 }
 
 function handleEngineerCommentsChange(e) {
@@ -148,7 +145,6 @@ function validateClientForm() {
 
 function validateEngineerForm() {
     let atLeastOneChecked = false;
-
     for (const checkbox of engineerProgressCheckboxes) {
         if (engineerProgress[checkbox.name]) {
             atLeastOneChecked = true;
@@ -160,79 +156,64 @@ function validateEngineerForm() {
         engineerSectionError.textContent = "At least one progress field must be checked.";
         return false;
     } else {
-        engineerSectionError.textContent = '';
         return true;
     }
 }
 
-
 function handleSendMessage() {
-    let messageText = "";
-    let sender = "";
+    let payload = {};
+    let messageToUser = '';
 
     if (activeTab === "client") {
         if (!validateClientForm()) {
             alert("Please fill in all required fields in the Client Section.");
             return;
         }
-        messageText = "Client Request:\n";
-        for (const field in clientRequest) {
-            messageText += `${field.replace(/([A-Z])/g, " $1").charAt(0).toUpperCase() + field.replace(/([A-Z])/g, " $1").slice(1)}: ${clientRequest[field]}\n`;
-        }
-        sender = "client";
-        clientRequest = {
-            location: "",
-            deploymentType: "",
-            timeline: "",
-            brand: "",
-            nettedIp: "",
-            terminalName: "",
-            terminalId: "",
-            ticketId: "",
-            notes: "",
-        };
-        renderClientRequest();
+        payload = { type: "client_request", data: clientRequest };
+        console.log('Client Request Payload prepared:', payload);
+        messageToUser = 'Client request submitted successfully!';
     } else if (activeTab === "engineer") {
         if (!validateEngineerForm()) {
             alert("Please check at least one progress field in the Engineer Section.");
             return;
         }
-        messageText = "Engineer Progress Update:\n";
-        for (const field in engineerProgress) {
-            if (field === "comments") {
-                messageText += `Comments: ${engineerProgress[field]}\n`;
-            } else {
-                messageText += `${field.replace(/([A-Z])/g, " $1").charAt(0).toUpperCase() + field.replace(/([A-Z])/g, " $1").slice(1)}: ${engineerProgress[field] ? 'Yes' : 'No'}\n`;
-            }
-        }
-        sender = "engineer";
-         engineerProgress = {
-            ipRequestRaised: false,
-            adrouteRequestRaised: false,
-            keysGenerated: false,
-            atmOnline: false,
-            comments: "",
-            completed: false,
-        };
-        renderEngineerProgress();
+        payload = { type: "engineer_update", data: engineerProgress };
+        console.log('Engineer Progress Payload prepared:', payload); // Log engineer data
+        messageToUser = 'Engineer progress updated successfully!';
     } else if (activeTab === "chat") {
-        messageText = newMessageInput.value.trim();
-        sender = "client";
-        if (!messageText) {
+        const chatMessage = newMessageInput.value.trim();
+        if (!chatMessage) {
             alert("Please type a message before sending.");
             return;
         }
+        payload = { type: "chat_message", data: { sender: "client", text: chatMessage } };
+        console.log('Chat Message Payload prepared:', payload);
+        messages.push({ sender: "client", text: chatMessage });
+        renderMessages();
         newMessageInput.value = "";
+        messageToUser = 'Your message has been sent!';
+    } else {
+        return;
     }
 
-    if (messageText) {
-        messages.push({ sender: sender, text: messageText });
-        renderMessages();
-        alert('Thank you! Message sent.');
+    if (activeTab === "client") {
+
+        clientRequest = {
+            location: "", deploymentType: "", timeline: "", brand: "",
+            nettedIp: "", terminalName: "", terminalId: "", ticketId: "",
+            notes: ""
+        };
+        renderClientRequest();
+    } else if (activeTab === "engineer") {
+        engineerProgress = {
+            ipRequestRaised: false, adrouteRequestRaised: false,
+            keysGenerated: false, atmOnline: false,
+            comments: "", completed: false,
+        };
+        renderEngineerProgress();
     }
 }
 
-// Attach event listeners
 tabButtons.forEach(button => {
     button.addEventListener("click", () => setActiveTab(button.dataset.tab));
 });
