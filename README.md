@@ -1,0 +1,1 @@
+//This project is a simple Request Portal created with pure HTML, CSS and JS to just DEMo how a portal can work for clients requesting for an ATM Portal which makes it easier for the company to process the request and document it

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ATM Configuration Request Portal</title>
+</head>
+<body>
+    <div class="container">
+        <h1>ATM Configuration Request Portal</h1>
+
+        <div class="tabs">
+            <button class="tab-button active" data-tab="client">Client Section</button>
+            <button class="tab-button" data-tab="engineer">Engineer Section</button>
+            <button class="tab-button" data-tab="chat">Chat Section</button>
+        </div>
+
+        <div id="client-section" class="tab-content">
+            <div class="form-field">
+                <label for="location">Location</label>
+                <input type="text" name="location" id="location" placeholder="Enter Location">
+                <div class="error-message" id="location-error"></div>
+            </div>
+            <div class="form-field">
+                <label for="deploymentType">Deployment Type</label>
+                <input type="text" name="deploymentType" id="deploymentType" placeholder="Enter Deployment Type">
+                <div class="error-message" id="deploymentType-error"></div>
+            </div>
+            <div class="form-field">
+                <label for="timeline">Timeline</label>
+                <input type="text" name="timeline" id="timeline" placeholder="Enter Timeline">
+                <div class="error-message" id="timeline-error"></div>
+            </div>
+            <div class="form-field">
+                <label for="brand">Brand</label>
+                <input type="text" name="brand" id="brand" placeholder="Enter Brand">
+                <div class="error-message" id="brand-error"></div>
+            </div>
+            <div class="form-field">
+                <label for="nettedIp">Netted Ip</label>
+                <input type="text" name="nettedIp" id="nettedIp" placeholder="Enter Netted Ip">
+                <div class="error-message" id="nettedIp-error"></div>
+            </div>
+            <div class="form-field">
+                <label for="terminalName">Terminal Name</label>
+                <input type="text" name="terminalName" id="terminalName" placeholder="Enter Terminal Name">
+                <div class="error-message" id="terminalName-error"></div>
+            </div>
+            <div class="form-field">
+                <label for="terminalId">Terminal Id</label>
+                <input type="text" name="terminalId" id="terminalId" placeholder="Enter Terminal Id">
+                <div class="error-message" id="terminalId-error"></div>
+            </div>
+            <div class="form-field">
+                <label for="ticketId">Ticket Id</label>
+                <input type="text" name="ticketId" id="ticketId" placeholder="Enter Ticket Id">
+                <div class="error-message" id="ticketId-error"></div>
+            </div>
+            <div class="form-field">
+                <label for="notes">Notes</label>
+                <textarea name="notes" id="notes" placeholder="Enter Notes"></textarea>
+                <div class="error-message" id="notes-error"></div>
+            </div>
+            <div class="send-button-container">
+                <button class="send-button" onclick="handleSendMessage()">Send</button>
+            </div>
+        </div>
+
+        <div id="engineer-section" class="tab-content" style="display: none;">
+            <div class="checkbox-field">
+                <input type="checkbox" id="ipRequestRaised" name="ipRequestRaised">
+                <label for="ipRequestRaised">Ip Request Raised</label>
+            </div>
+            <div class="checkbox-field">
+                <input type="checkbox" id="adrouteRequestRaised" name="adrouteRequestRaised">
+                <label for="adrouteRequestRaised">Adroute Request Raised</label>
+            </div>
+            <div class="checkbox-field">
+                <input type="checkbox" id="keysGenerated" name="keysGenerated">
+                <label for="keysGenerated">Keys Generated</label>
+            </div>
+            <div class="checkbox-field">
+                <input type="checkbox" id="atmOnline" name="atmOnline">
+                <label for="atmOnline">Atm Online</label>
+            </div>
+            <div class="form-field">
+                <label for="engineerComments">Comments</label>
+                <textarea name="comments" id="engineerComments"></textarea>
+            </div>
+            <div class="checkbox-field">
+                <input type="checkbox" id="completed" name="completed">
+                <label for="completed">Configuration Completed</label>
+            </div>
+            <div class="send-button-container">
+                <button class="send-button" onclick="handleSendMessage()">Send</button>
+            </div>
+        </div>
+
+        <div id="chat-section" class="tab-content" style="display: none;">
+            <div class="chat-container">
+                <div class="messages-display" id="messagesDisplay">
+                    </div>
+                <div class="chat-input-area">
+                    <input type="text" id="newMessage" placeholder="Type your message...">
+                    <button onclick="handleSendMessage()">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
